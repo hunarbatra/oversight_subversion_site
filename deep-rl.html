@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Reinforcement Learning | RL and Deep Learning</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Deep Reinforcement Learning</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="deep-learning.html">Deep Learning</a></li>
+                    <li><a href="reinforcement-learning.html">Reinforcement Learning</a></li>
+                    <li><a href="deep-rl.html" class="active">Deep RL</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <article>
+            <section>
+                <h2>What is Deep Reinforcement Learning?</h2>
+                <p>Deep Reinforcement Learning (Deep RL) combines Reinforcement Learning with Deep Learning. It uses deep neural networks to approximate value functions, policies, or environment models in RL settings. This approach is particularly powerful for problems with high-dimensional state spaces, like image-based environments where traditional RL methods struggle.</p>
+                
+                <p>The key insight behind Deep RL is that neural networks can learn useful representations from complex data, eliminating the need for manual feature engineering that was previously required in traditional RL.</p>
+                
+                <div class="diagram">
+                    <img src="assets/images/deep-rl-overview.png" alt="Deep RL Overview" class="responsive-img">
+                    <p class="caption">Figure 1: Integration of Deep Learning and Reinforcement Learning</p>
+                </div>
+                
+                <h3>Why Deep RL?</h3>
+                <p>Traditional RL algorithms face several limitations:</p>
+                <ul>
+                    <li><strong>Curse of Dimensionality:</strong> Performance degrades as state/action spaces grow</li>
+                    <li><strong>Feature Engineering:</strong> Requires manual design of state representations</li>
+                    <li><strong>Function Approximation:</strong> Simple approximators struggle with complex patterns</li>
+                </ul>
+                
+                <p>Deep neural networks address these challenges by:</p>
+                <ul>
+                    <li>Learning representations directly from high-dimensional raw data</li>
+                    <li>Providing powerful function approximation capabilities</li>
+                    <li>Enabling end-to-end learning from sensors to actions</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Deep RL Framework</h2>
+                
+                <p>In Deep RL, neural networks typically serve one of three roles:</p>
+                
+                <h3>Value Function Approximation</h3>
+                <p>Neural networks can approximate value functions:</p>
+                <ul>
+                    <li><strong>State-Value Function: \(V(s; \theta)\)</strong> - Estimates the expected return from state s</li>
+                    <li><strong>Action-Value Function: \(Q(s, a; \theta)\)</strong> - Estimates the expected return from taking action a in state s</li>
+                </ul>
+                
+                <h3>Policy Approximation</h3>
+                <p>Neural networks can represent policies directly:</p>
+                <ul>
+                    <li><strong>Deterministic Policy: \(\mu(s; \theta)\)</strong> - Maps states directly to actions</li>
+                    <li><strong>Stochastic Policy: \(\pi(a|s; \theta)\)</strong> - Outputs a probability distribution over actions</li>
+                </ul>
+                
+                <h3>Model Approximation</h3>
+                <p>Neural networks can learn environment dynamics:</p>
+                <ul>
+                    <li><strong>Transition Model: \(P(s'|s, a; \theta)\)</strong> - Predicts the next state</li>
+                    <li><strong>Reward Model: \(R(s, a; \theta)\)</strong> - Predicts the reward</li>
+                </ul>
+                
+                <div class="diagram">
+                    <img src="assets/images/deep-rl-components.png" alt="Deep RL Components" class="responsive-img">
+                    <p class="caption">Figure 2: Components of a Deep RL system</p>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Key Deep RL Algorithms</h2>
+                
+                <h3>Deep Q-Network (DQN)</h3>
+                <p>DQN uses a deep neural network to approximate the Q-value function. It introduced two key innovations to stabilize training:</p>
+                
+                <ul>
+                    <li><strong>Experience Replay:</strong> Stores experiences (s, a, r, s') in a replay buffer and samples them randomly to reduce correlations between consecutive updates and improve data efficiency.</li>
+                    <li><strong>Target Network:</strong> Uses a separate network with delayed parameter updates for generating Q-value targets to stabilize training.</li>
+                </ul>
+                
+                <div class="code-block">
+                    <pre><code>Algorithm: Deep Q-Network (DQN)
+1. Initialize replay memory D to capacity N
+2. Initialize action-value network Q with random weights θ
+3. Initialize target network Q̂ with weights θ⁻ = θ
+4. For episode = 1 to M:
+   a. Initialize state s₁
+   b. For t = 1 to T:
+      i.   With probability ε select random action aₜ
+           Otherwise select aₜ = argmax_a Q(sₜ, a; θ)
+      ii.  Execute action aₜ in environment and observe reward rₜ and next state sₜ₊₁
+      iii. Store transition (sₜ, aₜ, rₜ, sₜ₊₁) in D
+      iv.  Sample random minibatch of transitions (sⱼ, aⱼ, rⱼ, sⱼ₊₁) from D
+      v.   Set yⱼ = rⱼ if episode terminates at step j+1
+           Otherwise yⱼ = rⱼ + γ max_a' Q̂(sⱼ₊₁, a'; θ⁻)
+      vi.  Perform gradient descent step on (yⱼ - Q(sⱼ, aⱼ; θ))² with respect to θ
+      vii. Every C steps reset Q̂ = Q</code></pre>
+                </div>
+                
+                <p>The loss function for DQN is:</p>
+                
+                <div class="math-block">
+                    \[ L(\theta) = \mathbb{E}_{(s,a,r,s') \sim D} \left[ \left( r + \gamma \max_{a'} Q(s', a'; \theta^-) - Q(s, a; \theta) \right)^2 \right] \]
+                </div>
+                
+                <div class="diagram">
+                    <img src="assets/images/dqn-architecture.png" alt="DQN Architecture" class="responsive-img">
+                    <p class="caption">Figure 3: DQN architecture with experience replay and target network</p>
+                </div>
+                
+                <h3>Double DQN</h3>
+                <p>An improvement to DQN that addresses the overestimation bias of Q-values. It decouples action selection and evaluation:</p>
+                
+                <div class="math-block">
+                    \[ y_t = r_t + \gamma Q(s_{t+1}, \arg\max_{a} Q(s_{t+1}, a; \theta); \theta^-) \]
+                </div>
+                
+                <h3>Dueling DQN</h3>
+                <p>A network architecture that separates the estimation of state value and action advantage:</p>
+                
+                <div class="math-block">
+                    \[ Q(s, a; \theta, \alpha, \beta) = V(s; \theta, \beta) + \left( A(s, a; \theta, \alpha) - \frac{1}{|A|} \sum_{a'} A(s, a'; \theta, \alpha) \right) \]
+                </div>
+                
+                <p>This separation allows the network to learn which states are valuable without having to learn the effect of each action for each state.</p>
+                
+                <h3>Proximal Policy Optimization (PPO)</h3>
+                <p>A policy gradient method that aims to optimize policy performance while ensuring the policy doesn't change too drastically between updates. It uses a clipped surrogate objective:</p>
+                
+                <div class="math-block">
+                    \[ L^{CLIP}(\theta) = \hat{\mathbb{E}}_t \left[ \min(r_t(\theta) \hat{A}_t, \text{clip}(r_t(\theta), 1 - \epsilon, 1 + \epsilon) \hat{A}_t) \right] \]
+                </div>
+                
+                <p>where \(r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}\) is the probability ratio between the new and old policies.</p>
+                
+                <div class="code-block">
+                    <pre><code>Algorithm: Proximal Policy Optimization (PPO-Clip)
+1. Initialize policy parameters θ and value function parameters φ
+2. For iteration = 1, 2, ... do:
+   a. Collect set of trajectories D_k by running policy π_θ in the environment
+   b. Compute advantage estimates Â_t based on the current value function V_φ
+   c. Optimize surrogate L_CLIP w.r.t. θ for K epochs with minibatch size M
+      θ_new = argmax_θ L_CLIP(θ)
+   d. Update value function parameters φ by regression on sampled returns:
+      φ_new = argmin_φ Σ_t (V_φ(s_t) - Rt)²</code></pre>
+                </div>
+                
+                <h3>Deep Deterministic Policy Gradient (DDPG)</h3>
+                <p>An actor-critic algorithm designed for continuous action spaces. It combines DQN with deterministic policy gradients:</p>
+                
+                <ul>
+                    <li><strong>Actor Network:</strong> Learns a deterministic policy μ(s; θ^μ) mapping states to specific actions</li>
+                    <li><strong>Critic Network:</strong> Learns the Q-function Q(s, a; θ^Q) to evaluate the actor's actions</li>
+                </ul>
+                
+                <p>The actor is updated by following the gradient of the expected return:</p>
+                
+                <div class="math-block">
+                    \[ \nabla_{\theta^{\mu}} J \approx \mathbb{E}_{s \sim \rho^{\beta}} \left[ \nabla_a Q(s, a; \theta^Q)|_{a=\mu(s; \theta^{\mu})} \nabla_{\theta^{\mu}} \mu(s; \theta^{\mu}) \right] \]
+                </div>
+                
+                <h3>Soft Actor-Critic (SAC)</h3>
+                <p>An off-policy actor-critic algorithm that maximizes both expected return and entropy (randomness) in the policy. The objective includes an entropy term to encourage exploration:</p>
+                
+                <div class="math-block">
+                    \[ J(\pi) = \mathbb{E}_{(s_t, a_t) \sim \rho_{\pi}} \left[ \sum_{t=0}^{\infty} \gamma^t (r(s_t, a_t) + \alpha \mathcal{H}(\pi(\cdot|s_t))) \right] \]
+                </div>
+                
+                <p>where \(\mathcal{H}(\pi(\cdot|s_t))\) is the entropy of the policy at state \(s_t\) and \(\alpha\) is a temperature parameter that determines the relative importance of entropy versus reward.</p>
+                
+                <h3>Twin Delayed DDPG (TD3)</h3>
+                <p>Addresses function approximation errors in DDPG by introducing three key modifications:</p>
+                
+                <ul>
+                    <li><strong>Clipped Double Q-learning:</strong> Uses two critic networks and takes the minimum of their predictions to reduce overestimation bias</li>
+                    <li><strong>Delayed Policy Updates:</strong> Updates the policy network less frequently than the critic networks</li>
+                    <li><strong>Target Policy Smoothing:</strong> Adds noise to the target action to make the algorithm more robust to errors</li>
+                </ul>
+                
+                <div class="code-block">
+                    <pre><code># TD3 implementation in PyTorch (simplified)
+def update_critics(critic1, critic2, critic_target1, critic_target2, actor_target, 
+                  batch, gamma, noise_clip, policy_noise):
+    # Get next actions with noise for smoothing
+    next_actions = actor_target(batch.next_states)
+    noise = torch.randn_like(next_actions) * policy_noise
+    noise = noise.clamp(-noise_clip, noise_clip)
+    next_actions = (next_actions + noise).clamp(-1, 1)
+    
+    # Compute target Q values (using smaller of two critics)
+    target_Q1 = critic_target1(batch.next_states, next_actions)
+    target_Q2 = critic_target2(batch.next_states, next_actions)
+    target_Q = torch.min(target_Q1, target_Q2)
+    target_Q = batch.rewards + (1 - batch.dones) * gamma * target_Q
+    
+    # Current Q values
+    current_Q1 = critic1(batch.states, batch.actions)
+    current_Q2 = critic2(batch.states, batch.actions)
+    
+    # Compute critic losses and update
+    critic1_loss = F.mse_loss(current_Q1, target_Q.detach())
+    critic2_loss = F.mse_loss(current_Q2, target_Q.detach())
+    # ... update critic networks ...</code></pre>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Advanced Deep RL Techniques</h2>
+                
+                <h3>Distributional RL</h3>
+                <p>Instead of estimating the expected value, distributional RL estimates the entire distribution of returns. This provides more information about uncertainty and risk.</p>
+                
+                <p>Examples include:</p>
+                <ul>
+                    <li><strong>C51:</strong> Represents the return distribution using a categorical distribution with 51 atoms</li>
+                    <li><strong>QR-DQN:</strong> Uses quantile regression to estimate the distribution</li>
+                    <li><strong>IQN:</strong> Implicitly represents the quantiles of the return distribution</li>
+                </ul>
+                
+                <h3>Hierarchical RL</h3>
+                <p>Decomposes complex tasks into simpler subtasks organized in a hierarchy. This helps with exploration and learning in environments with sparse rewards.</p>
+                
+                <p>Components typically include:</p>
+                <ul>
+                    <li><strong>High-level policy:</strong> Selects subgoals or options</li>
+                    <li><strong>Low-level policy:</strong> Executes primitive actions to achieve subgoals</li>
+                </ul>
+                
+                <div class="diagram">
+                    <img src="assets/images/hierarchical-rl.png" alt="Hierarchical RL" class="responsive-img">
+                    <p class="caption">Figure 4: Hierarchical structure in RL</p>
+                </div>
+                
+                <h3>Meta-RL</h3>
+                <p>Meta-RL algorithms learn how to learn, enabling rapid adaptation to new tasks. They typically use recurrent neural networks or other memory-based architectures to capture task-relevant information.</p>
+                
+                <p>Examples include:</p>
+                <ul>
+                    <li><strong>RL²:</strong> Uses an RNN to learn a learning algorithm</li>
+                    <li><strong>MAML:</strong> Model-Agnostic Meta-Learning that optimizes for rapid adaptation</li>
+                </ul>
+                
+                <h3>Multi-Task and Transfer Learning</h3>
+                <p>Techniques to leverage knowledge across multiple tasks:</p>
+                <ul>
+                    <li><strong>Shared representations:</strong> Learning common features across tasks</li>
+                    <li><strong>Progressive networks:</strong> Freezing networks trained on earlier tasks and adding lateral connections to new networks</li>
+                    <li><strong>Policy distillation:</strong> Transferring knowledge from multiple teacher policies to a single student policy</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Challenges in Deep RL</h2>
+                
+                <h3>Sample Efficiency</h3>
+                <p>Deep RL algorithms often require millions of environment interactions to learn effective policies. Techniques to improve sample efficiency include:</p>
+                
+                <ul>
+                    <li><strong>Model-based methods:</strong> Learning an environment model to generate simulated experience</li>
+                    <li><strong>Off-policy learning:</strong> Reusing past experience</li>
+                    <li><strong>Self-supervised auxiliary tasks:</strong> Learning additional tasks to improve representations</li>
+                    <li><strong>Imitation learning:</strong> Learning from expert demonstrations</li>
+                </ul>
+                
+                <h3>Stability and Reproducibility</h3>
+                <p>Training can be unstable due to the non-stationarity of the target policy, function approximation errors, and stochasticity. Issues include:</p>
+                
+                <ul>
+                    <li><strong>Sensitivity to hyperparameters:</strong> Small changes in configuration can lead to large performance differences</li>
+                    <li><strong>Seed sensitivity:</strong> Different random seeds can yield vastly different results</li>
+                    <li><strong>Implementation details:</strong> Minor implementation variations can significantly affect performance</li>
+                </ul>
+                
+                <div class="code-block">
+                    <pre><code># Techniques for improving stability
+# 1. Use gradient clipping
+torch.nn.utils.clip_grad_norm_(network.parameters(), max_norm=1.0)
+
+# 2. Use learning rate schedules
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1000, gamma=0.9)
+
+# 3. Implement proper weight initialization
+def weights_init_(m):
+    if isinstance(m, nn.Linear):
+        torch.nn.init.xavier_uniform_(m.weight, gain=1)
+        torch.nn.init.constant_(m.bias, 0)</code></pre>
+                </div>
+                
+                <h3>Exploration-Exploitation Tradeoff</h3>
+                <p>Balancing between exploring new actions and exploiting known good actions is particularly challenging in deep RL. Strategies include:</p>
+                
+                <ul>
+                    <li><strong>Intrinsic motivation:</strong> Generating internal rewards for novelty or surprise</li>
+                    <li><strong>Count-based exploration:</strong> Encouraging visits to infrequently visited states</li>
+                    <li><strong>Parameter space noise:</strong> Adding noise to network parameters instead of action space</li>
+                    <li><strong>Curiosity-driven exploration:</strong> Rewarding prediction errors of a learned model</li>
+                </ul>
+                
+                <h3>Generalization</h3>
+                <p>Ensuring that learned policies generalize well to new, unseen scenarios remains challenging. Approaches include:</p>
+                
+                <ul>
+                    <li><strong>Domain randomization:</strong> Training on a wide range of environment variations</li>
+                    <li><strong>Data augmentation:</strong> Applying transformations to observations</li>
+                    <li><strong>Regularization techniques:</strong> Dropout, batch normalization, etc.</li>
+                    <li><strong>Adversarial training:</strong> Making policies robust to worst-case perturbations</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Breakthrough Applications</h2>
+                
+                <h3>Game Playing</h3>
+                <p>Deep RL has achieved superhuman performance in various games:</p>
+                
+                <h4>AlphaGo and AlphaZero (DeepMind)</h4>
+                <p>AlphaGo combined deep neural networks with tree search to become the first program to defeat a world champion in Go. AlphaZero later improved this by learning entirely through self-play, without human data.</p>
+                
+                <h4>Atari Games (DQN)</h4>
+                <p>The original DQN paper demonstrated superhuman performance on several Atari games, learning directly from pixels.</p>
+                
+                <div class="code-block">
+                    <pre><code># Simple DQN for Atari in PyTorch
+class DQN(nn.Module):
+    def __init__(self, input_shape, num_actions):
+        super(DQN, self).__init__()
+        
+        self.conv = nn.Sequential(
+            nn.Conv2d(input_shape[0], 32, kernel_size=8, stride=4),
+            nn.ReLU(),
+            nn.Conv2d(32, 64, kernel_size=4, stride=2),
+            nn.ReLU(),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1),
+            nn.ReLU()
+        )
+        
+        conv_out_size = self._get_conv_output(input_shape)
+        
+        self.fc = nn.Sequential(
+            nn.Linear(conv_out_size, 512),
+            nn.ReLU(),
+            nn.Linear(512, num_actions)
+        )
+    
+    def _get_conv_output(self, shape):
+        o = self.conv(torch.zeros(1, *shape))
+        return int(np.prod(o.size()))</code></pre>
+                </div>
+                
+                <h4>StarCraft II (AlphaStar)</h4>
+                <p>AlphaStar used a transformer-based architecture and population-based training to master the complex real-time strategy game StarCraft II.</p>
+                
+                <h4>Dota 2 (OpenAI Five)</h4>
+                <p>OpenAI Five trained a team of five neural networks to play together as a cohesive team in Dota 2, defeating world champion human teams.</p>
+                
+                <h3>Robotics</h3>
+                <p>Deep RL enables robots to learn complex tasks directly from experience:</p>
+                
+                <ul>
+                    <li><strong>Dexterous manipulation:</strong> Learning fine motor skills for object manipulation</li>
+                    <li><strong>Locomotion:</strong> Teaching robots to walk, run, or navigate complex terrain</li>
+                    <li><strong>Sim-to-real transfer:</strong> Training in simulation and transferring to real robots</li>
+                </ul>
+                
+                <div class="diagram">
+                    <img src="assets/images/robotics-rl.png" alt="Robotics RL" class="responsive-img">
+                    <p class="caption">Figure 5: Deep RL for robotic control</p>
+                </div>
+                
+                <h3>Recommendation Systems</h3>
+                <p>Companies use deep RL to optimize content recommendations and user engagement:</p>
+                
+                <ul>
+                    <li>Modeling user interactions as sequential decision problems</li>
+                    <li>Optimizing for long-term engagement rather than immediate clicks</li>
+                    <li>Balancing exploration (recommending new content) with exploitation (recommending content similar to what the user has enjoyed)</li>
+                </ul>
+                
+                <h3>Energy Management</h3>
+                <p>Deep RL optimizes energy consumption in various systems:</p>
+                
+                <ul>
+                    <li><strong>Data centers:</strong> Reducing cooling costs while maintaining performance</li>
+                    <li><strong>Smart grids:</strong> Balancing supply and demand in electricity networks</li>
+                    <li><strong>Building management:</strong> Optimizing HVAC systems for energy efficiency and comfort</li>
+                </ul>
+                
+                <h3>Healthcare</h3>
+                <p>Applications in healthcare include:</p>
+                
+                <ul>
+                    <li><strong>Treatment optimization:</strong> Personalizing treatment plans for chronic diseases</li>
+                    <li><strong>Clinical trials:</strong> Optimizing drug dosing protocols</li>
+                    <li><strong>Resource allocation:</strong> Managing hospital resources efficiently</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Implementing Deep RL Systems</h2>
+                
+                <h3>Frameworks and Libraries</h3>
+                <p>Popular tools for implementing Deep RL:</p>
+                
+                <ul>
+                    <li><strong>Gymnasium (formerly OpenAI Gym):</strong> Standard interface for RL environments</li>
+                    <li><strong>Stable Baselines3:</strong> High-quality implementations of algorithms</li>
+                    <li><strong>RLlib:</strong> Scalable RL library built on Ray</li>
+                    <li><strong>TensorFlow Agents:</strong> RL components in TensorFlow</li>
+                    <li><strong>PyTorch RL libraries:</strong> Tianshou, rlpyt, CleanRL</li>
+                </ul>
+                
+                <h3>Best Practices</h3>
+                <p>Guidelines for implementing Deep RL systems:</p>
+                
+                <ul>
+                    <li><strong>Start simple:</strong> Begin with well-tested algorithms and baseline environments</li>
+                    <li><strong>Normalize observations:</strong> Standardize inputs to neural networks</li>
+                    <li><strong>Careful reward design:</strong> Ensure rewards align with intended behavior</li>
+                    <li><strong>Thorough evaluation:</strong> Use multiple seeds and proper statistical analysis</li>
+                    <li><strong>Visualization:</strong> Monitor training progress with appropriate metrics</li>
+                </ul>
+                
+                <div class="code-block">
+                    <pre><code># Example of a training loop with visualization
+import gymnasium as gym
+import numpy as np
+import matplotlib.pyplot as plt
+from stable_baselines3 import PPO
+
+# Create environment
+env = gym.make('LunarLander-v2')
+
+# Initialize agent
+model = PPO('MlpPolicy', env, verbose=1)
+
+# Training with evaluation
+eval_interval = 10000
+timesteps = 0
+eval_rewards = []
+timestep_history = []
+
+for i in range(10):
+    model.learn(total_timesteps=eval_interval)
+    timesteps += eval_interval
+    
+    # Evaluate current policy
+    mean_reward = 0
+    episodes = 10
+    for _ in range(episodes):
+        obs = env.reset()[0]
+        done = False
+        episode_reward = 0
+        while not done:
+            action, _ = model.predict(obs)
+            obs, reward, done, _, _ = env.step(action)
+            episode_reward += reward
+        mean_reward += episode_reward
+    mean_reward /= episodes
+    
+    # Record results
+    timestep_history.append(timesteps)
+    eval_rewards.append(mean_reward)
+    
+    print(f"Timesteps: {timesteps}, Mean reward: {mean_reward:.2f}")
+
+# Plot learning curve
+plt.figure(figsize=(10, 6))
+plt.plot(timestep_history, eval_rewards)
+plt.xlabel('Timesteps')
+plt.ylabel('Mean Reward')
+plt.title('PPO Learning Curve on LunarLander-v2')
+plt.grid(True)
+plt.savefig('learning_curve.png')
+plt.show()</code></pre>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Future Directions</h2>
+                
+                <h3>Sample-Efficient Learning</h3>
+                <p>Developing algorithms that can learn from minimal interaction with the environment:</p>
+                <ul>
+                    <li>More sophisticated model-based methods</li>
+                    <li>Better transfer learning across tasks</li>
+                    <li>Leveraging offline data effectively</li>
+                </ul>
+                
+                <h3>Multi-Agent Deep RL</h3>
+                <p>Advancing techniques for multiple agents to learn simultaneously:</p>
+                <ul>
+                    <li>Emergent communication and cooperation</li>
+                    <li>Handling non-stationarity in multi-agent settings</li>
+                    <li>Scaling to large numbers of agents</li>
+                </ul>
+                
+                <h3>Real-World Applications</h3>
+                <p>Bridging the gap between research and practical applications:</p>
+                <ul>
+                    <li>Safe exploration in sensitive domains</li>
+                    <li>Handling partial observability and stochasticity</li>
+                    <li>Integrating with existing systems</li>
+                </ul>
+                
+                <h3>Neuro-Symbolic Approaches</h3>
+                <p>Combining neural networks with symbolic reasoning:</p>
+                <ul>
+                    <li>Incorporating prior knowledge and constraints</li>
+                    <li>Improving interpretability of learned policies</li>
+                    <li>Enabling more complex reasoning</li>
+                </ul>
+            </section>
+        </article>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 RL and Deep Learning Basics</p>
+        </div>
+    </footer>
+    
+    <script src="assets/js/script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reinforcement Learning Basics | RL and Deep Learning</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <!-- ... existing header code ... -->
+    </header>
+
+    <main class="container">
+        <article>
+            <section>
+                <h2>What is Reinforcement Learning?</h2>
+                <p>Reinforcement Learning (RL) is a type of machine learning where an agent learns to make decisions by performing actions in an environment to maximize some notion of cumulative reward. It's learning by trial and error, where the agent receives feedback in terms of rewards or penalties.</p>
+                
+                <p>Unlike supervised learning where training data includes the "correct answer," in RL the agent must discover which actions yield the highest reward through exploration and exploitation of its environment.</p>
+                
+                <div class="diagram">
+                    <img src="assets/images/rl-loop.png" alt="Reinforcement Learning Loop" class="responsive-img">
+                    <p class="caption">Figure 1: The Reinforcement Learning loop showing agent-environment interaction</p>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Key Components of RL</h2>
+                
+                <h3>Agent</h3>
+                <p>The learner or decision-maker that interacts with the environment. The agent:</p>
+                <ul>
+                    <li>Observes the current state of the environment</li>
+                    <li>Selects and performs actions</li>
+                    <li>Receives rewards or penalties</li>
+                    <li>Updates its knowledge and policy based on experience</li>
+                </ul>
+                
+                <h3>Environment</h3>
+                <p>The world that the agent lives in and interacts with. The environment:</p>
+                <ul>
+                    <li>Receives actions from the agent</li>
+                    <li>Changes its state based on these actions</li>
+                    <li>Provides observations and rewards to the agent</li>
+                </ul>
+                
+                <h3>State (S)</h3>
+                <p>A specific situation in which the agent finds itself. States can be:</p>
+                <ul>
+                    <li><strong>Fully Observable:</strong> The agent can see the complete state of the environment</li>
+                    <li><strong>Partially Observable:</strong> The agent only has access to limited information about the environment</li>
+                </ul>
+                
+                <h3>Action (A)</h3>
+                <p>A move the agent can make. The set of possible actions can be:</p>
+                <ul>
+                    <li><strong>Discrete:</strong> A finite set of distinct actions (e.g., move left, right, up, down)</li>
+                    <li><strong>Continuous:</strong> Actions defined over a continuous range (e.g., exact steering angle)</li>
+                </ul>
+                
+                <h3>Reward (R)</h3>
+                <p>Feedback from the environment that evaluates the agent's action. The reward signal:</p>
+                <ul>
+                    <li>Indicates the immediate desirability of an action</li>
+                    <li>Can be positive (reward) or negative (penalty)</li>
+                    <li>Guides the agent toward optimal behavior</li>
+                </ul>
+                
+                <h3>Policy (π)</h3>
+                <p>The strategy that the agent employs to determine the next action based on the current state. Mathematically, a policy is a mapping from states to actions:</p>
+                
+                <div class="math-block">
+                    \[\pi(a|s) = P(A_t = a | S_t = s)\]
+                </div>
+                
+                <p>where \(\pi(a|s)\) is the probability of taking action \(a\) in state \(s\) at time \(t\).</p>
+                
+                <h3>Value Function</h3>
+                <p>Predicts the expected future reward, helping the agent to evaluate how good a state or action is. There are two main types:</p>
+                
+                <p><strong>State-Value Function (V):</strong> The expected return starting from state \(s\) and following policy \(\pi\):</p>
+                
+                <div class="math-block">
+                    \[V^\pi(s) = E_\pi[G_t | S_t = s]\]
+                </div>
+                
+                <p><strong>Action-Value Function (Q):</strong> The expected return starting from state \(s\), taking action \(a\), and following policy \(\pi\):</p>
+                
+                <div class="math-block">
+                    \[Q^\pi(s, a) = E_\pi[G_t | S_t = s, A_t = a]\]
+                </div>
+                
+                <p>where \(G_t\) is the discounted sum of future rewards.</p>
+                
+                <h3>Return</h3>
+                <p>The total discounted future reward the agent expects to receive. Mathematically:</p>
+                
+                <div class="math-block">
+                    \[G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + ... = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}\]
+                </div>
+                
+                <p>where \(\gamma\) is the discount factor (0 ≤ \(\gamma\) ≤ 1) that determines the importance of future rewards.</p>
+                
+                <h3>Markov Decision Process (MDP)</h3>
+                <p>A mathematical framework for modeling decision-making problems with:</p>
+                <ul>
+                    <li>A set of states S</li>
+                    <li>A set of actions A</li>
+                    <li>Transition probabilities P(s'|s,a)</li>
+                    <li>Reward function R(s,a,s')</li>
+                    <li>Discount factor γ</li>
+                </ul>
+                
+                <div class="diagram">
+                    <img src="assets/images/mdp-diagram.png" alt="Markov Decision Process" class="responsive-img">
+                    <p class="caption">Figure 2: Visualization of a Markov Decision Process</p>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Types of RL Algorithms</h2>
+                
+                <h3>Model-Based vs. Model-Free</h3>
+                <p><strong>Model-Based:</strong> The agent uses a model of the environment to make decisions.</p>
+                <ul>
+                    <li>Requires learning or having access to a transition model P(s'|s,a) and reward model R(s,a,s')</li>
+                    <li>Can plan ahead by simulating possible future states</li>
+                    <li>Examples: Dyna-Q, MBPO (Model-Based Policy Optimization)</li>
+                </ul>
+                
+                <p><strong>Model-Free:</strong> The agent learns directly from interactions without creating a model.</p>
+                <ul>
+                    <li>Does not require knowledge of environment dynamics</li>
+                    <li>Typically requires more samples but has fewer assumptions</li>
+                    <li>Examples: Q-learning, SARSA, Policy Gradient methods</li>
+                </ul>
+                
+                <h3>Value-Based vs. Policy-Based</h3>
+                <p><strong>Value-Based:</strong> Learn the value of being in a given state or taking a specific action.</p>
+                <ul>
+                    <li>Focus on learning value functions (V(s) or Q(s,a))</li>
+                    <li>Derive policy implicitly (e.g., by selecting the action with highest Q-value)</li>
+                    <li>Examples: Q-learning, DQN, SARSA</li>
+                </ul>
+                
+                <p><strong>Policy-Based:</strong> Directly learn the policy mapping states to actions.</p>
+                <ul>
+                    <li>Parameterize the policy π(a|s;θ) and optimize the parameters θ</li>
+                    <li>Can learn stochastic policies</li>
+                    <li>Better suited for continuous action spaces</li>
+                    <li>Examples: REINFORCE, PPO, TRPO</li>
+                </ul>
+                
+                <p><strong>Actor-Critic:</strong> Combine both value-based and policy-based approaches.</p>
+                <ul>
+                    <li>"Actor" (policy) selects actions</li>
+                    <li>"Critic" (value function) evaluates actions to guide the actor</li>
+                    <li>Examples: A2C, A3C, SAC, DDPG</li>
+                </ul>
+                
+                <h3>On-Policy vs. Off-Policy</h3>
+                <p><strong>On-Policy:</strong> Learn the value of the policy being used for exploration.</p>
+                <ul>
+                    <li>Policy used to make decisions is also being improved</li>
+                    <li>Typically more stable but less sample-efficient</li>
+                    <li>Examples: SARSA, PPO, TRPO</li>
+                </ul>
+                
+                <p><strong>Off-Policy:</strong> Learn the value of a different policy than the one being used for exploration.</p>
+                <ul>
+                    <li>Can learn from experiences generated by old policies or even human demonstrations</li>
+                    <li>More sample-efficient but potentially less stable</li>
+                    <li>Examples: Q-learning, DQN, SAC</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Common RL Algorithms</h2>
+                
+                <h3>Q-Learning</h3>
+                <p>A model-free, off-policy algorithm that learns the value of actions in states.</p>
+                
+                <div class="code-block">
+                    <pre><code>Algorithm: Q-Learning
+1. Initialize Q(s,a) arbitrarily for all state-action pairs
+2. For each episode:
+   a. Initialize state s
+   b. For each step of episode:
+      i.   Choose action a from s using policy derived from Q (e.g., ε-greedy)
+      ii.  Take action a, observe reward r and next state s'
+      iii. Update Q-value:
+           Q(s,a) ← Q(s,a) + α[r + γ * max_a' Q(s',a') - Q(s,a)]
+      iv.  s ← s'
+   c. Until s is terminal</code></pre>
+                </div>
+                
+                <p>The Q-value update rule can be written mathematically as:</p>
+                
+                <div class="math-block">
+                    \[Q(s,a) \leftarrow Q(s,a) + \alpha [r + \gamma \max_{a'} Q(s',a') - Q(s,a)]\]
+                </div>
+                
+                <p>where:</p>
+                <ul>
+                    <li>\(\alpha\) is the learning rate</li>
+                    <li>\(\gamma\) is the discount factor</li>
+                    <li>\(r\) is the immediate reward</li>
+                    <li>\(\max_{a'} Q(s',a')\) is the maximum Q-value for the next state</li>
+                </ul>
+                
+                <h3>SARSA</h3>
+                <p>State-Action-Reward-State-Action is an on-policy algorithm that updates Q values using the policy being followed.</p>
+                
+                <div class="code-block">
+                    <pre><code>Algorithm: SARSA
+1. Initialize Q(s,a) arbitrarily for all state-action pairs
+2. For each episode:
+   a. Initialize state s
+   b. Choose action a from s using policy derived from Q (e.g., ε-greedy)
+   c. For each step of episode:
+      i.   Take action a, observe reward r and next state s'
+      ii.  Choose action a' from s' using policy derived from Q
+      iii. Update Q-value:
+           Q(s,a) ← Q(s,a) + α[r + γ * Q(s',a') - Q(s,a)]
+      iv.  s ← s', a ← a'
+   d. Until s is terminal</code></pre>
+                </div>
+                
+                <p>The key difference from Q-learning is that SARSA uses the Q-value of the actual next action a' chosen, rather than the maximum Q-value of the next state:</p>
+                
+                <div class="math-block">
+                    \[Q(s,a) \leftarrow Q(s,a) + \alpha [r + \gamma Q(s',a') - Q(s,a)]\]
+                </div>
+                
+                <h3>Policy Gradient Methods</h3>
+                <p>Directly optimize the policy without using a value function. These methods update the policy parameters θ in the direction of the gradient of expected return:</p>
+                
+                <div class="math-block">
+                    \[\nabla_\theta J(\theta) \approx \hat{g} = \frac{1}{m} \sum_{i=1}^{m} \sum_{t=0}^{T} \nabla_\theta \log \pi_\theta(a_{i,t}|s_{i,t}) G_{i,t}\]
+                </div>
+                
+                <div class="code-block">
+                    <pre><code>Algorithm: REINFORCE (Basic Policy Gradient)
+1. Initialize policy parameters θ
+2. For each episode:
+   a. Generate an episode s₀,a₀,r₁,s₁,...,sₜ₋₁,aₜ₋₁,rₜ following π_θ
+   b. For each step t of the episode:
+      i.   Calculate return Gₜ = Σᵏ₌ₜᵀ γᵏ⁻ᵗrₖ
+      ii.  Update policy parameters:
+           θ ← θ + α∇_θlog π_θ(aₜ|sₜ)Gₜ</code></pre>
+                </div>
+                
+                <h3>Actor-Critic Methods</h3>
+                <p>Combine value-based and policy-based approaches with an actor that updates the policy and a critic that evaluates actions.</p>
+                
+                <div class="code-block">
+                    <pre><code>Algorithm: Basic Actor-Critic
+1. Initialize policy parameters θ and value function parameters ω
+2. For each episode:
+   a. Initialize state s
+   b. For each step of episode:
+      i.   Choose action a from s using policy π_θ
+      ii.  Take action a, observe reward r and next state s'
+      iii. Calculate TD error: δ = r + γV_ω(s') - V_ω(s)
+      iv.  Update critic (value function): ω ← ω + αᵥδ∇_ωV_ω(s)
+      v.   Update actor (policy): θ ← θ + αₐδ∇_θlog π_θ(a|s)
+      vi.  s ← s'
+   c. Until s is terminal</code></pre>
+                </div>
+                
+                <h3>Proximal Policy Optimization (PPO)</h3>
+                <p>A policy gradient method that aims to optimize policy performance while ensuring the policy doesn't change too drastically between updates.</p>
+                
+                <div class="math-block">
+                    \[L^{CLIP}(\theta) = \hat{E}_t [\min(r_t(\theta) \hat{A}_t, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t)]\]
+                </div>
+                
+                <p>where \(r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}\) is the probability ratio between the new and old policies.</p>
+            </section>
+            
+            <section>
+                <h2>Exploration vs. Exploitation</h2>
+                <p>A fundamental trade-off in RL where the agent must balance:</p>
+                <ul>
+                    <li><strong>Exploration:</strong> Trying new actions to discover better strategies</li>
+                    <li><strong>Exploitation:</strong> Using known good actions to maximize reward</li>
+                </ul>
+                
+                <p>Common exploration strategies include:</p>
+                <ul>
+                    <li><strong>ε-greedy:</strong> Choose the best-known action with probability 1-ε, and a random action with probability ε</li>
+                    <li><strong>Softmax/Boltzmann exploration:</strong> Select actions based on their estimated values, with a temperature parameter controlling randomness</li>
+                    <li><strong>Upper Confidence Bound (UCB):</strong> Select actions based on their estimated value plus an exploration bonus</li>
+                    <li><strong>Thompson Sampling:</strong> Sample action values from a posterior distribution and choose the highest</li>
+                    <li><strong>Intrinsic Motivation:</strong> Generate internal rewards for exploring novel states or behaviors</li>
+                </ul>
+                
+                <div class="diagram">
+                    <img src="assets/images/exploration-exploitation.png" alt="Exploration vs. Exploitation" class="responsive-img">
+                    <p class="caption">Figure 3: Visualization of the exploration-exploitation trade-off</p>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Multi-Agent Reinforcement Learning</h2>
+                <p>Extension of RL to settings with multiple agents interacting in the same environment. Key aspects include:</p>
+                <ul>
+                    <li><strong>Cooperative:</strong> Agents work together to achieve common goals</li>
+                    <li><strong>Competitive:</strong> Agents have opposing goals (zero-sum games)</li>
+                    <li><strong>Mixed:</strong> Some combination of cooperation and competition</li>
+                </ul>
+                
+                <p>Challenges in multi-agent RL:</p>
+                <ul>
+                    <li>Non-stationarity (other agents are learning and changing)</li>
+                    <li>Partial observability of other agents' states and intentions</li>
+                    <li>Credit assignment in team settings</li>
+                    <li>Scalability with increasing number of agents</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Applications of RL</h2>
+                <ul>
+                    <li><strong>Game Playing:</strong>
+                        <ul>
+                            <li>Chess, Go, Poker (DeepMind's AlphaGo, AlphaZero)</li>
+                            <li>Video games (Atari, StarCraft, Dota 2)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Robotics:</strong>
+                        <ul>
+                            <li>Robot locomotion and manipulation</li>
+                            <li>Autonomous navigation</li>
+                            <li>Dexterous manipulation</li>
+                        </ul>
+                    </li>
+                    <li><strong>Autonomous Vehicles:</strong>
+                        <ul>
+                            <li>Path planning and navigation</li>
+                            <li>Traffic behavior prediction</li>
+                            <li>Decision making in complex environments</li>
+                        </ul>
+                    </li>
+                    <li><strong>Resource Management:</strong>
+                        <ul>
+                            <li>Energy grid optimization</li>
+                            <li>Data center cooling and resource allocation</li>
+                            <li>Network routing</li>
+                        </ul>
+                    </li>
+                    <li><strong>Recommender Systems:</strong>
+                        <ul>
+                            <li>Content recommendation</li>
+                            <li>User engagement optimization</li>
+                            <li>Ad placement</li>
+                        </ul>
+                    </li>
+                    <li><strong>Financial Trading:</strong>
+                        <ul>
+                            <li>Automated trading strategies</li>
+                            <li>Portfolio management</li>
+                            <li>Risk assessment</li>
+                        </ul>
+                    </li>
+                    <li><strong>Healthcare:</strong>
+                        <ul>
+                            <li>Treatment planning</li>
+                            <li>Personalized medicine</li>
+                            <li>Resource allocation in hospitals</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <div class="diagram">
+                    <img src="assets/images/rl-applications.png" alt="RL Applications" class="responsive-img">
+                    <p class="caption">Figure 4: Various applications of Reinforcement Learning</p>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 RL and Deep Learning Basics</p>
+        </div>
+    </footer>
+    
+    <script src="assets/js/script.js"></script>
+</body>
+</html> 

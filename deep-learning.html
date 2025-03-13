@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Learning Basics | RL and Deep Learning</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Deep Learning Basics</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="deep-learning.html" class="active">Deep Learning</a></li>
+                    <li><a href="reinforcement-learning.html">Reinforcement Learning</a></li>
+                    <li><a href="deep-rl.html">Deep RL</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <article>
+            <section>
+                <h2>What is Deep Learning?</h2>
+                <p>Deep Learning is a subset of machine learning that uses neural networks with multiple layers (deep neural networks) to analyze various factors of data. These networks learn from large amounts of data and can recognize patterns with incredible accuracy.</p>
+                
+                <p>Unlike traditional machine learning algorithms that plateau in performance as data increases, deep learning algorithms continue to improve with more data. This scalability has enabled breakthroughs in computer vision, natural language processing, and many other domains.</p>
+                
+                <div class="diagram">
+                    <img src="assets/images/ml-dl-ai-diagram.png" alt="Relationship between AI, Machine Learning, and Deep Learning" class="responsive-img">
+                    <p class="caption">Figure 1: Relationship between AI, Machine Learning, and Deep Learning</p>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Key Concepts in Deep Learning</h2>
+                
+                <h3>Neural Networks</h3>
+                <p>Neural networks are computing systems inspired by the biological neural networks in animal brains. They consist of nodes (neurons) organized in layers that process information. Each neuron receives input, applies a transformation, and passes the output to the next layer.</p>
+                
+                <div class="diagram">
+                    <img src="assets/images/neural-network.png" alt="Basic Neural Network Architecture" class="responsive-img">
+                    <p class="caption">Figure 2: Basic Neural Network Architecture showing input, hidden, and output layers</p>
+                </div>
+                
+                <h3>Layers</h3>
+                <p>A typical deep neural network contains:</p>
+                <ul>
+                    <li><strong>Input Layer:</strong> Receives the initial data (e.g., pixel values of an image)</li>
+                    <li><strong>Hidden Layers:</strong> Multiple layers where computation happens. More layers allow the network to learn more complex patterns</li>
+                    <li><strong>Output Layer:</strong> Produces the final result (e.g., classification probabilities)</li>
+                </ul>
+                
+                <h3>Neurons and Weights</h3>
+                <p>A single neuron computes a weighted sum of its inputs, adds a bias term, and then applies an activation function:</p>
+                
+                <div class="code-block">
+                    <pre><code>output = activation_function(∑(weight_i * input_i) + bias)</code></pre>
+                </div>
+                
+                <p>Mathematically, if we denote the activation function as \(f\), weights as \(w_i\), inputs as \(x_i\), and bias as \(b\), the output of a neuron is:</p>
+                
+                <div class="math-block">
+                    \[y = f\left(\sum_{i=1}^{n} w_i x_i + b\right)\]
+                </div>
+                
+                <h3>Activation Functions</h3>
+                <p>These functions determine whether a neuron should be activated based on its input. They introduce non-linearity, which is crucial for learning complex patterns.</p>
+                
+                <p>Common activation functions include:</p>
+                <ul>
+                    <li><strong>ReLU (Rectified Linear Unit):</strong> \(f(x) = \max(0, x)\)</li>
+                    <li><strong>Sigmoid:</strong> \(f(x) = \frac{1}{1 + e^{-x}}\)</li>
+                    <li><strong>Tanh:</strong> \(f(x) = \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}\)</li>
+                    <li><strong>Leaky ReLU:</strong> \(f(x) = \max(\alpha x, x)\) where \(\alpha\) is a small constant</li>
+                </ul>
+                
+                <div class="diagram">
+                    <img src="assets/images/activation-functions.png" alt="Common Activation Functions" class="responsive-img">
+                    <p class="caption">Figure 3: Comparison of common activation functions</p>
+                </div>
+                
+                <h3>Loss Functions</h3>
+                <p>Loss functions measure how well the model is performing by quantifying the difference between predicted outputs and actual targets. Common loss functions include:</p>
+                
+                <ul>
+                    <li><strong>Mean Squared Error (MSE):</strong> Used for regression problems</li>
+                    <li><strong>Cross-Entropy Loss:</strong> Used for classification problems</li>
+                    <li><strong>Binary Cross-Entropy:</strong> Used for binary classification</li>
+                </ul>
+                
+                <h3>Backpropagation</h3>
+                <p>Backpropagation is the algorithm used to update weights in the neural network based on the error rate from the previous iteration. It works by calculating the gradient of the loss function with respect to each weight by the chain rule, then using gradient descent to update the weights.</p>
+                
+                <div class="code-block">
+                    <pre><code>Algorithm: Backpropagation
+1. Perform a forward pass through the network
+2. Calculate the loss using the loss function
+3. Compute the gradient of the loss with respect to each weight
+4. Update each weight using gradient descent:
+   weight = weight - learning_rate * gradient</code></pre>
+                </div>
+                
+                <h3>Gradient Descent</h3>
+                <p>An optimization algorithm used to minimize the loss function by iteratively moving toward the steepest descent. There are several variants:</p>
+                
+                <ul>
+                    <li><strong>Batch Gradient Descent:</strong> Uses the entire dataset to compute gradients</li>
+                    <li><strong>Stochastic Gradient Descent (SGD):</strong> Uses a single sample</li>
+                    <li><strong>Mini-batch Gradient Descent:</strong> Uses a small batch of samples</li>
+                    <li><strong>Optimizers like Adam, RMSprop, AdaGrad:</strong> Advanced gradient descent algorithms with adaptive learning rates</li>
+                </ul>
+                
+                <div class="diagram">
+                    <img src="assets/images/gradient-descent.png" alt="Gradient Descent Visualization" class="responsive-img">
+                    <p class="caption">Figure 4: Visualization of gradient descent optimization</p>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Types of Neural Networks</h2>
+                
+                <h3>Feedforward Neural Networks (FFNNs)</h3>
+                <p>The simplest type of neural network where connections between nodes do not form cycles. Information moves in only one direction, from input to output.</p>
+                
+                <h3>Convolutional Neural Networks (CNNs)</h3>
+                <p>Specialized for processing grid-like data such as images. CNNs use convolutional layers to detect spatial hierarchies of features through operations like convolution, pooling, and fully connected layers.</p>
+                
+                <div class="diagram">
+                    <img src="assets/images/cnn-architecture.png" alt="CNN Architecture" class="responsive-img">
+                    <p class="caption">Figure 5: Typical CNN architecture with convolutional, pooling, and fully connected layers</p>
+                </div>
+                
+                <p>Key components of CNNs include:</p>
+                <ul>
+                    <li><strong>Convolutional Layer:</strong> Applies filters to detect features</li>
+                    <li><strong>Pooling Layer:</strong> Reduces dimensionality while preserving important information</li>
+                    <li><strong>Fully Connected Layer:</strong> Performs classification based on extracted features</li>
+                </ul>
+                
+                <h3>Recurrent Neural Networks (RNNs)</h3>
+                <p>Designed for sequential data where context matters, like text or time series data. RNNs have connections that form directed cycles, allowing them to maintain a hidden state that captures information about previous inputs.</p>
+                
+                <div class="diagram">
+                    <img src="assets/images/rnn-unfolded.png" alt="RNN Unfolded" class="responsive-img">
+                    <p class="caption">Figure 6: Unfolded RNN showing the recurrent connections over time</p>
+                </div>
+                
+                <p>Variants of RNNs include:</p>
+                <ul>
+                    <li><strong>Long Short-Term Memory (LSTM):</strong> Addresses the vanishing gradient problem in standard RNNs</li>
+                    <li><strong>Gated Recurrent Unit (GRU):</strong> A simplified version of LSTM with fewer parameters</li>
+                    <li><strong>Bidirectional RNNs:</strong> Process sequences in both forward and backward directions</li>
+                </ul>
+                
+                <h3>Transformers</h3>
+                <p>A newer architecture that uses self-attention mechanisms and has revolutionized natural language processing. Unlike RNNs, Transformers process entire sequences in parallel, making them more efficient to train.</p>
+                
+                <div class="diagram">
+                    <img src="assets/images/transformer-architecture.png" alt="Transformer Architecture" class="responsive-img">
+                    <p class="caption">Figure 7: Transformer architecture with attention mechanisms</p>
+                </div>
+                
+                <p>Key components of Transformers include:</p>
+                <ul>
+                    <li><strong>Self-Attention:</strong> Computes relationships between all positions in a sequence</li>
+                    <li><strong>Multi-Head Attention:</strong> Allows the model to focus on different representation subspaces</li>
+                    <li><strong>Position Encodings:</strong> Provide information about token positions in the sequence</li>
+                    <li><strong>Feed-Forward Networks:</strong> Process each position independently</li>
+                </ul>
+                
+                <h3>Generative Adversarial Networks (GANs)</h3>
+                <p>A framework where two neural networks (Generator and Discriminator) compete in a zero-sum game. The Generator creates samples that aim to fool the Discriminator, which tries to distinguish real data from generated samples.</p>
+                
+                <div class="diagram">
+                    <img src="assets/images/gan-architecture.png" alt="GAN Architecture" class="responsive-img">
+                    <p class="caption">Figure 8: GAN architecture showing Generator and Discriminator networks</p>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Training Deep Neural Networks</h2>
+                
+                <h3>Data Preprocessing</h3>
+                <p>Important techniques for preparing data:</p>
+                <ul>
+                    <li><strong>Normalization:</strong> Scaling features to a standard range</li>
+                    <li><strong>Data Augmentation:</strong> Creating variations of training examples</li>
+                    <li><strong>Feature Engineering:</strong> Creating new features from existing ones</li>
+                </ul>
+                
+                <h3>Hyperparameter Tuning</h3>
+                <p>Optimizing model configuration parameters such as:</p>
+                <ul>
+                    <li>Learning rate</li>
+                    <li>Number of layers and neurons</li>
+                    <li>Batch size</li>
+                    <li>Regularization strength</li>
+                </ul>
+                
+                <h3>Regularization Techniques</h3>
+                <p>Methods to prevent overfitting:</p>
+                <ul>
+                    <li><strong>Dropout:</strong> Randomly deactivating neurons during training</li>
+                    <li><strong>L1/L2 Regularization:</strong> Adding penalty terms to the loss function</li>
+                    <li><strong>Early Stopping:</strong> Halting training when validation performance stops improving</li>
+                    <li><strong>Batch Normalization:</strong> Normalizing layer inputs to stabilize training</li>
+                </ul>
+                
+                <h3>Transfer Learning</h3>
+                <p>Using pre-trained models as starting points for new tasks:</p>
+                <ul>
+                    <li><strong>Feature Extraction:</strong> Using pre-trained networks as fixed feature extractors</li>
+                    <li><strong>Fine-tuning:</strong> Adapting pre-trained networks by updating some or all weights</li>
+                </ul>
+                
+                <div class="code-block">
+                    <pre><code># Example of transfer learning with PyTorch
+import torch
+import torchvision.models as models
+from torch import nn
+
+# Load a pretrained model
+resnet = models.resnet50(pretrained=True)
+
+# Freeze all parameters
+for param in resnet.parameters():
+    param.requires_grad = False
+    
+# Replace the final fully connected layer
+num_features = resnet.fc.in_features
+resnet.fc = nn.Linear(num_features, num_classes)
+
+# Train only the final layer
+optimizer = torch.optim.Adam(resnet.fc.parameters(), lr=0.001)</code></pre>
+                </div>
+            </section>
+            
+            <section>
+                <h2>Applications of Deep Learning</h2>
+                <ul>
+                    <li><strong>Computer Vision:</strong>
+                        <ul>
+                            <li>Image classification and object detection</li>
+                            <li>Facial recognition and emotion detection</li>
+                            <li>Medical image analysis</li>
+                            <li>Autonomous driving</li>
+                        </ul>
+                    </li>
+                    <li><strong>Natural Language Processing:</strong>
+                        <ul>
+                            <li>Machine translation</li>
+                            <li>Sentiment analysis and text classification</li>
+                            <li>Question answering systems</li>
+                            <li>Large language models (e.g., GPT, LLaMA)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Speech Recognition and Generation:</strong>
+                        <ul>
+                            <li>Voice assistants</li>
+                            <li>Transcription services</li>
+                            <li>Text-to-speech systems</li>
+                        </ul>
+                    </li>
+                    <li><strong>Recommendation Systems:</strong>
+                        <ul>
+                            <li>Personalized content recommendations</li>
+                            <li>Product recommendations</li>
+                            <li>Collaborative filtering</li>
+                        </ul>
+                    </li>
+                    <li><strong>Healthcare:</strong>
+                        <ul>
+                            <li>Disease diagnosis</li>
+                            <li>Drug discovery</li>
+                            <li>Personalized medicine</li>
+                        </ul>
+                    </li>
+                    <li><strong>Game Playing:</strong>
+                        <ul>
+                            <li>Game AI (when combined with RL)</li>
+                            <li>Procedural content generation</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Ethical Considerations</h2>
+                <p>Important ethical issues in deep learning:</p>
+                <ul>
+                    <li><strong>Bias and Fairness:</strong> Models can perpetuate and amplify biases present in training data</li>
+                    <li><strong>Privacy:</strong> Deep learning models can extract sensitive information from data</li>
+                    <li><strong>Transparency:</strong> Deep models are often "black boxes" with limited interpretability</li>
+                    <li><strong>Energy Consumption:</strong> Training large models requires significant computational resources</li>
+                    <li><strong>Misuse:</strong> Potential for applications like deepfakes and autonomous weapons</li>
+                </ul>
+            </section>
+        </article>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 RL and Deep Learning Basics</p>
+        </div>
+    </footer>
+    
+    <script src="assets/js/script.js"></script>
+</body>
+</html> 
