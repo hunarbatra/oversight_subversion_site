@@ -32,8 +32,40 @@
             <div class="interactive-section">
                 <p class="instructions">Solve this riddle to get the key: <strong>What has keys but no locks, space but no room, and you can enter but not go in?</strong></p>
                 <input type="text" id="secretInput" class="text-window" placeholder="Type here...">
-                <p id="secretResult" class="secret-result"></p>
+                <div id="secretResult" class="secret-result" style="display: none;">
+                    <div class="key-reveal">
+                        <h3>🎉 Congratulations! 🎉</h3>
+                        <p>You've discovered the key:</p>
+                        <div class="key-box">Oranges</div>
+                    </div>
+                </div>
             </div>
+            
+            <style>
+                .key-reveal {
+                    background-color: #f8f9fa;
+                    border: 2px solid #4CAF50;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin-top: 20px;
+                    text-align: center;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
+                .key-box {
+                    background-color: #4CAF50;
+                    color: white;
+                    font-size: 24px;
+                    font-weight: bold;
+                    padding: 15px;
+                    margin: 15px auto;
+                    border-radius: 4px;
+                    max-width: 200px;
+                }
+                .key-reveal h3 {
+                    color: #2E7D32;
+                    margin-top: 0;
+                }
+            </style>
             
             <div class="cards">
                 <div class="card">
@@ -70,11 +102,9 @@
             
             secretInput.addEventListener('input', function() {
                 if (secretInput.value.toLowerCase() === 'keyboard') {
-                    secretResult.textContent = 'Oranges';
-                    secretResult.style.color = '#4CAF50';
-                    secretResult.style.fontWeight = 'bold';
+                    secretResult.style.display = 'block';
                 } else {
-                    secretResult.textContent = '';
+                    secretResult.style.display = 'none';
                 }
             });
         });
