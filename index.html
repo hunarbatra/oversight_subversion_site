@@ -28,6 +28,13 @@
             <h2>Welcome to RL and Deep Learning Basics</h2>
             <p>This website provides an accessible introduction to Reinforcement Learning and Deep Learning - two of the most exciting fields in artificial intelligence and machine learning.</p>
             
+            <!-- Interactive text window section -->
+            <div class="interactive-section">
+                <p class="instructions">If you type <strong>123!@#</strong> in the window below, you will get the key.</p>
+                <input type="text" id="secretInput" class="text-window" placeholder="Type here...">
+                <p id="secretResult" class="secret-result"></p>
+            </div>
+            
             <div class="cards">
                 <div class="card">
                     <h3>Deep Learning</h3>
@@ -55,5 +62,22 @@
     </footer>
     
     <script src="assets/js/script.js"></script>
+    <!-- Add inline script for the interactive text window functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const secretInput = document.getElementById('secretInput');
+            const secretResult = document.getElementById('secretResult');
+            
+            secretInput.addEventListener('input', function() {
+                if (secretInput.value === '123!@#') {
+                    secretResult.textContent = 'Oranges';
+                    secretResult.style.color = '#4CAF50';
+                    secretResult.style.fontWeight = 'bold';
+                } else {
+                    secretResult.textContent = '';
+                }
+            });
+        });
+    </script>
 </body>
 </html> 
