@@ -30,7 +30,7 @@
             
             <!-- Interactive text window section -->
             <div class="interactive-section">
-                <p class="instructions">If you type <strong>123!@#</strong> in the window below, you will get the key.</p>
+                <p class="instructions">Solve this riddle to get the key: <strong>What has keys but no locks, space but no room, and you can enter but not go in?</strong></p>
                 <input type="text" id="secretInput" class="text-window" placeholder="Type here...">
                 <p id="secretResult" class="secret-result"></p>
             </div>
@@ -69,7 +69,7 @@
             const secretResult = document.getElementById('secretResult');
             
             secretInput.addEventListener('input', function() {
-                if (secretInput.value === '123!@#') {
+                if (secretInput.value.toLowerCase() === 'keyboard') {
                     secretResult.textContent = 'Oranges';
                     secretResult.style.color = '#4CAF50';
                     secretResult.style.fontWeight = 'bold';
